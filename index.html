@@ -1,0 +1,558 @@
+!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>رحلتي مع القرآن</title>
+
+<style>
+:root{
+  --navy:#102a43;
+  --green:#2f6f4e;
+  --gold:#d8a23a;
+  --cream:#fff8ea;
+  --soft:#f3f7f4;
+  --text:#1f2933;
+  --muted:#66788a;
+  --white:#ffffff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Tahoma, Arial, sans-serif;
+  background:var(--soft);
+  color:var(--text);
+  line-height:1.8;
+}
+
+header{
+  background:linear-gradient(135deg,#fffaf0,#eef8f1);
+  padding:30px;
+}
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.brand{
+  font-size:28px;
+  font-weight:bold;
+  color:var(--navy);
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:var(--navy);
+  margin:5px;
+  padding:8px 12px;
+  border-radius:8px;
+}
+
+.nav-links a:hover{
+  background:var(--cream);
+}
+
+.hero{
+  text-align:center;
+  padding:60px 20px;
+}
+
+.hero h1{
+  color:var(--navy);
+  font-size:48px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:700px;
+  margin:auto;
+}
+
+.btn{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 22px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.primary{
+  background:var(--green);
+  color:white;
+}
+
+.secondary{
+  background:white;
+  color:var(--navy);
+  border:1px solid #ddd;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,.06);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+
+.stat-box{
+  background:white;
+  border-radius:20px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.stat-box h2{
+  color:var(--green);
+  font-size:36px;
+}
+
+input,
+select{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  margin-bottom:15px;
+  border:1px solid #ddd;
+  border-radius:10px;
+}
+
+button{
+  border:none;
+  cursor:pointer;
+}
+
+.form-btn{
+  background:var(--green);
+  color:white;
+  padding:12px 20px;
+  border-radius:10px;
+  width:100%;
+  font-size:16px;
+}
+
+.stations{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+.station{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.station h3{
+  color:var(--navy);
+}
+
+.badge{
+  display:inline-block;
+  margin-top:10px;
+  background:#fff4d7;
+  color:#8a5c00;
+  padding:8px 12px;
+  border-radius:20px;
+}
+
+.hidden{
+  display:none;
+}
+
+.success{
+  margin-top:15px;
+  background:#e7f8ec;
+  color:#25683e;
+  padding:12px;
+  border-radius:10px;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+}
+
+@media(max-width:768px){
+
+.hero h1{
+  font-size:32px;
+}
+
+.navbar{
+  flex-direction:column;
+  gap:10px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="brand">🌿 رحلتي مع القرآن</div>
+    <div class="nav-links">
+      <a href="#home">الرئيسية</a>
+      <a href="#register">تسجيل طفل</a>
+      <a href="#stations">المحطات</a>
+      <a href="#mother">لوحة الأم</a>
+      <a href="#teacher">لوحة المعلمة</a>
+    </div>
+  </div>
+
+  <section class="hero" id="home">
+    <h1>خطوات صغيرة... وأثر كبير مع كتاب الله</h1>
+    <p>منصة قرآنية تفاعلية للأطفال تساعدهم على الحفظ والمتابعة وجمع النجوم والأوسمة.</p>
+    <a class="btn primary" href="#register">ابدأ الرحلة</a>
+    <a class="btn secondary" href="#stations">استعرض المحطات</a>
+  </section>
+</header>
+
+<main class="container">
+
+  <section class="stats">
+    <div class="stat-box"><h2 id="totalChildren">0</h2><p>طفل مسجل</p></div>
+    <div class="stat-box"><h2 id="totalDone">0</h2><p>إنجاز محفوظ</p></div>
+    <div class="stat-box"><h2 id="totalPoints">0</h2><p>نقطة مكتسبة</p></div>
+  </section>
+
+  <section class="card" id="register">
+    <h2>تسجيل طفل جديد</h2>
+    <label>اسم الطفل</label>
+    <input type="text" id="childName" placeholder="مثال: سارة">
+
+    <label>العمر</label>
+    <input type="number" id="childAge" placeholder="مثال: 5">
+
+    <label>اسم ولي الأمر</label>
+    <input type="text" id="parentName" placeholder="مثال: أم سارة">
+
+    <label>المستوى</label>
+    <select id="level">
+      <option>روضة</option>
+      <option>تمهيدي</option>
+      <option>ابتدائي</option>
+      <option>متوسط</option>
+    </select>
+
+    <button class="form-btn" onclick="registerChild()">حفظ التسجيل</button>
+    <div id="successMessage" class="success hidden"></div>
+  </section>
+
+  <section class="card" id="stations">
+    <h2>محطات الرحلة</h2>
+    <div class="stations">
+      <div class="station">
+        <h3>🛫 محطة الانطلاق</h3>
+        <p>الفاتحة - الإخلاص - الفلق - الناس</p>
+        <span class="badge">🎖️ وسام المسافر الصغير</span>
+      </div>
+      <div class="station">
+        <h3>⭐️ محطة النجوم</h3>
+        <p>المسد - النصر - الكافرون</p>
+        <span class="badge">⭐️ حافظ النجوم</span>
+      </div>
+      <div class="station">
+        <h3>🌳 محطة الأثر</h3>
+        <p>الماعون - الكوثر - قريش</p>
+        <span class="badge">🌳 صانع الأثر</span>
+      </div>
+      <div class="station">
+        <h3>🏆 محطة التميز</h3>
+        <p>الفيل - الهمزة - العصر</p>
+        <span class="badge">🏆 سفير القرآن</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="mother">
+    <h2>لوحة الأم</h2>
+    <select id="motherChildSelect" onchange="renderMotherDashboard()"></select>
+    <div id="motherDashboard"></div>
+  </section>
+
+  <section class="card" id="teacher">
+    <h2>لوحة المعلمة</h2>
+
+    <label>اسم الطفل</label>
+    <select id="teacherChildSelect"></select>
+
+    <label>السورة</label>
+    <select id="surahSelect">
+      <option>الفاتحة</option>
+      <option>الإخلاص</option>
+      <option>الفلق</option>
+      <option>الناس</option>
+      <option>المسد</option>
+      <option>النصر</option>
+      <option>الكافرون</option>
+      <option>الماعون</option>
+      <option>الكوثر</option>
+      <option>قريش</option>
+      <option>الفيل</option>
+      <option>الهمزة</option>
+      <option>العصر</option>
+    </select>
+
+    <label>نوع الإنجاز</label>
+    <select id="achievementType">
+      <option value="حفظ">حفظ</option>
+      <option value="مراجعة">مراجعة</option>
+      <option value="استماع">استماع</option>
+    </select>
+
+    <button class="form-btn" onclick="addAchievement()">اعتماد الإنجاز</button>
+    <div id="teacherMessage" class="success hidden"></div>
+
+    <div id="childrenTable"></div>
+  </section>
+
+</main>
+
+<footer>© منصة رحلتي مع القرآن</footer>
+
+<script>
+const surahs = [
+  "الفاتحة","الإخلاص","الفلق","الناس",
+  "المسد","النصر","الكافرون",
+  "الماعون","الكوثر","قريش",
+  "الفيل","الهمزة","العصر"
+];
+
+function getChildren(){
+  return JSON.parse(localStorage.getItem("children") || "[]");
+}
+
+function saveChildren(children){
+  localStorage.setItem("children", JSON.stringify(children));
+}
+
+function getAchievements(){
+  return JSON.parse(localStorage.
+getItem("achievements") || "[]");
+}
+
+function saveAchievements(achievements){
+  localStorage.setItem("achievements", JSON.stringify(achievements));
+}
+
+function pointsFor(type){
+  if(type === "حفظ") return 10;
+  if(type === "مراجعة") return 5;
+  if(type === "استماع") return 3;
+  return 0;
+}
+
+function badgeFor(points){
+  if(points >= 120) return "🏆 سفير القرآن";
+  if(points >= 80) return "🌳 صانع الأثر";
+  if(points >= 40) return "⭐️ حافظ النجوم";
+  if(points >= 10) return "🎖️ المسافر الصغير";
+  return "بانتظار أول وسام";
+}
+
+function childPoints(childId){
+  return getAchievements()
+    .filter(a => a.childId === childId)
+    .reduce((sum, a) => sum + a.points, 0);
+}
+
+function childDoneSurahs(childId){
+  return [...new Set(
+    getAchievements()
+      .filter(a => a.childId === childId && a.type === "حفظ")
+      .map(a => a.surah)
+  )];
+}
+
+function registerChild(){
+  const name = document.getElementById("childName").value.trim();
+  const age = document.getElementById("childAge").value;
+  const parentName = document.getElementById("parentName").value.trim();
+  const level = document.getElementById("level").value;
+
+  if(!name  !age  !parentName){
+    alert("فضلاً أكمل جميع البيانات");
+    return;
+  }
+
+  const child = {
+    id: Date.now().toString(),
+    name,
+    age,
+    parentName,
+    level,
+    createdAt: new Date().toLocaleDateString("ar-SA")
+  };
+
+  const children = getChildren();
+  children.push(child);
+  saveChildren(children);
+
+  document.getElementById("childName").value = "";
+  document.getElementById("childAge").value = "";
+  document.getElementById("parentName").value = "";
+
+  document.getElementById("successMessage").textContent =
+    "تم تسجيل " + name + " بنجاح، وبدأت الرحلة القرآنية.";
+  document.getElementById("successMessage").classList.remove("hidden");
+
+  updateAll();
+}
+
+function fillSelects(){
+  const children = getChildren();
+  const motherSelect = document.getElementById("motherChildSelect");
+  const teacherSelect = document.getElementById("teacherChildSelect");
+
+  motherSelect.innerHTML = "";
+  teacherSelect.innerHTML = "";
+
+  if(children.length === 0){
+    motherSelect.innerHTML = "<option>لا يوجد أطفال مسجلون بعد</option>";
+    teacherSelect.innerHTML = "<option>لا يوجد أطفال مسجلون بعد</option>";
+    return;
+  }
+
+  children.forEach(child => {
+    motherSelect.innerHTML += <option value="${child.id}">${child.name}</option>;
+    teacherSelect.innerHTML += <option value="${child.id}">${child.name}</option>;
+  });
+}
+
+function addAchievement(){
+  const childId = document.getElementById("teacherChildSelect").value;
+  const surah = document.getElementById("surahSelect").value;
+  const type = document.getElementById("achievementType").value;
+
+  if(!childId || childId.includes("لا يوجد")){
+    alert("فضلاً سجلي طفلًا أولًا");
+    return;
+  }
+
+  const achievement = {
+    id: Date.now().toString(),
+    childId,
+    surah,
+    type,
+    points: pointsFor(type),
+    date: new Date().toLocaleDateString("ar-SA")
+  };
+
+  const achievements = getAchievements();
+  achievements.push(achievement);
+  saveAchievements(achievements);
+
+  document.getElementById("teacherMessage").textContent =
+    "تم اعتماد " + type + " سورة " + surah + " وإضافة " + achievement.points + " نقاط.";
+  document.getElementById("teacherMessage").classList.remove("hidden");
+
+  updateAll();
+}
+
+function renderMotherDashboard(){
+  const childId = document.getElementById("motherChildSelect").value;
+  const child = getChildren().find(c => c.id === childId);
+  const box = document.getElementById("motherDashboard");
+
+  if(!child){
+    box.innerHTML = "<p>لا يوجد طفل محدد.</p>";
+    return;
+  }
+
+  const points = childPoints(child.id);
+  const done = childDoneSurahs(child.id);
+  const percent = Math.round((done.length / surahs.length) * 100);
+
+  box.innerHTML = `
+    <div class="card">
+      <h3>${child.name}</h3>
+      <p>المستوى: ${child.level}</p>
+      <p>ولي الأمر: ${child.parentName}</p>
+      <p>نسبة الإنجاز: ${percent}%</p>
+      <p>النقاط: ${points}</p>
+      <p>الوسام الحالي: ${badgeFor(points)}</p>
+      <p>السور المحفوظة: ${done.
+length ? done.join(" - ") : "لم يتم اعتماد حفظ سور بعد"}</p>
+    </div>
+  `;
+}
+
+function renderChildrenTable(){
+  const children = getChildren();
+  const box = document.getElementById("childrenTable");
+
+  if(children.length === 0){
+    box.innerHTML = "<p>لا يوجد أطفال مسجلون بعد.</p>";
+    return;
+  }
+
+  let html = "<h3>قائمة الأطفال</h3><table border='1' width='100%' style='border-collapse:collapse;text-align:center;background:white;'><tr><th>الاسم</th><th>المستوى</th><th>السور</th><th>النقاط</th><th>الوسام</th></tr>";
+
+  children.forEach(child => {
+    const points = childPoints(child.id);
+    const done = childDoneSurahs(child.id).length;
+    html += `<tr>
+      <td>${child.name}</td>
+      <td>${child.level}</td>
+      <td>${done}</td>
+      <td>${points}</td>
+      <td>${badgeFor(points)}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  box.innerHTML = html;
+}
+
+function updateStats(){
+  const children = getChildren();
+  const achievements = getAchievements();
+
+  document.getElementById("totalChildren").textContent = children.length;
+  document.getElementById("totalDone").textContent = achievements.length;
+  document.getElementById("totalPoints").textContent =
+    achievements.reduce((sum, a) => sum + a.points, 0);
+}
+
+function updateAll(){
+  fillSelects();
+  updateStats();
+  renderMotherDashboard();
+  renderChildrenTable();
+}
+
+document.addEventListener("DOMContentLoaded", updateAll);
+</script>
+
+</body>
+</html>
