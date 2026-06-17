@@ -7,6 +7,12 @@
 
 <title>رحلتي مع القرآن</title>
 
+<!--
+منصة رحلتي مع القرآن
+فكرة وتصميم وإشراف: أ. تهاني القرشي
+جميع الحقوق محفوظة © 2026
+-->
+
 <style>
 :root{
   --navy:#102a43;
@@ -339,7 +345,7 @@ footer{
 </main>
 
 <footer>
-© 2026 منصة رحلتي مع القرآن<br>
+ © 2026 منصة رحلتي مع القرآن<br>
 جميع الحقوق محفوظة<br>
 فكرة وتصميم وإشراف : أ. تهاني القرشي
 </footer>
@@ -361,8 +367,7 @@ function saveChildren(children){
 }
 
 function getAchievements(){
-  return JSON.parse(localStorage.
-getItem("achievements") || "[]");
+  return JSON.parse(localStorage.getItem("achievements") || "[]");
 }
 
 function saveAchievements(achievements){
@@ -404,7 +409,7 @@ function registerChild(){
   const parentName = document.getElementById("parentName").value.trim();
   const level = document.getElementById("level").value;
 
-  if(!name  !age  !parentName){
+  if(!name || !age || !parentName){
     alert("فضلاً أكمل جميع البيانات");
     return;
   }
@@ -448,8 +453,8 @@ function fillSelects(){
   }
 
   children.forEach(child => {
-    motherSelect.innerHTML += <option value="${child.id}">${child.name}</option>;
-    teacherSelect.innerHTML += <option value="${child.id}">${child.name}</option>;
+    motherSelect.innerHTML += `<option value="${child.id}">${child.name}</option>`;
+    teacherSelect.innerHTML += `<option value="${child.id}">${child.name}</option>`;
   });
 }
 
@@ -505,8 +510,7 @@ function renderMotherDashboard(){
       <p>نسبة الإنجاز: ${percent}%</p>
       <p>النقاط: ${points}</p>
       <p>الوسام الحالي: ${badgeFor(points)}</p>
-      <p>السور المحفوظة: ${done.
-length ? done.join(" - ") : "لم يتم اعتماد حفظ سور بعد"}</p>
+      <p>السور المحفوظة: ${done.length ? done.join(" - ") : "لم يتم اعتماد حفظ سور بعد"}</p>
     </div>
   `;
 }
@@ -520,18 +524,31 @@ function renderChildrenTable(){
     return;
   }
 
-  let html = "<h3>قائمة الأطفال</h3><table border='1' width='100%' style='border-collapse:collapse;text-align:center;background:white;'><tr><th>الاسم</th><th>المستوى</th><th>السور</th><th>النقاط</th><th>الوسام</th></tr>";
+  let html = `
+    <h3>قائمة الأطفال</h3>
+    <table border="1" width="100%" style="border-collapse:collapse;text-align:center;background:white;">
+      <tr>
+        <th>الاسم</th>
+        <th>المستوى</th>
+        <th>السور</th>
+        <th>النقاط</th>
+        <th>الوسام</th>
+      </tr>
+  `;
 
   children.forEach(child => {
     const points = childPoints(child.id);
     const done = childDoneSurahs(child.id).length;
-    html += `<tr>
-      <td>${child.name}</td>
-      <td>${child.level}</td>
-      <td>${done}</td>
-      <td>${points}</td>
-      <td>${badgeFor(points)}</td>
-    </tr>`;
+
+    html += `
+      <tr>
+        <td>${child.name}</td>
+        <td>${child.level}</td>
+        <td>${done}</td>
+        <td>${points}</td>
+        <td>${badgeFor(points)}</td>
+      </tr>
+    `;
   });
 
   html += "</table>";
