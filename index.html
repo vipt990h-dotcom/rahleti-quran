@@ -236,6 +236,11 @@ td, th{
   border:1px solid #eee;
 }
 
+.logout-btn{background:#b42318;color:white;padding:10px 18px;border-radius:10px;margin-top:10px}
+.edit-btn{background:var(--gold);color:white;padding:7px 10px;border-radius:8px;margin:2px}
+.delete-btn{background:#b42318;color:white;padding:7px 10px;border-radius:8px;margin:2px}
+.admin-note{margin-top:10px;background:#fff4d7;color:#7c5816;padding:12px;border-radius:10px}
+
 footer{
   text-align:center;
   padding:30px;
@@ -283,6 +288,28 @@ footer{
     <div class="stat-box"><h2 id="totalChildren">0</h2><p>طفل مسجل</p></div>
     <div class="stat-box"><h2 id="totalDone">0</h2><p>إنجاز محفوظ</p></div>
     <div class="stat-box"><h2 id="totalPoints">0</h2><p>نقطة مكتسبة</p></div>
+  </section>
+
+
+  <section class="card" id="loginSection">
+    <h2>دخول المعلمة / الأدمن</h2>
+    <p class="admin-note">لوحة المعلمة لا تظهر إلا بعد تسجيل الدخول.</p>
+
+    <label>البريد الإلكتروني</label>
+    <input type="email" id="adminEmail" placeholder="بريد حساب المعلمة">
+
+    <label>كلمة المرور</label>
+    <input type="password" id="adminPassword" placeholder="كلمة المرور">
+
+    <button class="form-btn" id="loginBtn" onclick="loginAdmin()">تسجيل الدخول</button>
+    <div id="loginMessage" class="success hidden"></div>
+    <div id="loginError" class="error hidden"></div>
+  </section>
+
+  <section class="card hidden" id="adminStatus">
+    <h2>تم دخول المعلمة</h2>
+    <p id="adminEmailText"></p>
+    <button class="logout-btn" onclick="logoutAdmin()">تسجيل الخروج</button>
   </section>
 
   <section class="card" id="register">
@@ -345,7 +372,7 @@ footer{
     <div id="motherDashboard"></div>
   </section>
 
-  <section class="card" id="teacher">
+  <section class="card hidden" id="teacher">
     <h2>لوحة المعلمة</h2>
 
     <label>اسم الطفل</label>
@@ -390,6 +417,7 @@ footer{
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -404,6 +432,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 const surahs = [
   "الفاتحة","الإخلاص","الفلق","الناس",
@@ -414,6 +443,7 @@ const surahs = [
 
 let childrenData = [];
 let achievementsData = [];
+let currentAdmin = null;
 
 function showFirebaseError(error){
   const box = document.getElementById("firebaseError");
@@ -455,6 +485,67 @@ function childDoneSurahs(childId){
       .filter(a => a.childId === childId && a.type === "حفظ")
       .map(a => a.surah)
   )];
+}
+
+
+function setAdminView(user){
+  currentAdmin = user || null;
+  const loginSection = document.getElementById("loginSection");
+  const adminStatus = document.getElementById("adminStatus");
+  const teacherSection = document.getElementById("teacher");
+  const adminEmailText = document.getElementById("adminEmailText");
+
+  if(user){
+    loginSection.classList.add("hidden");
+    adminStatus.classList.remove("hidden");
+    teacherSection.classList.remove("hidden");
+    adminEmailText.textContent = "الدخول الحالي: " + user.email;
+  }else{
+    loginSection.classList.remove("hidden");
+    adminStatus.classList.add("hidden");
+    teacherSection.classList.add("hidden");
+    adminEmailText.textContent = "";
+  }
+
+  renderChildrenTable();
+}
+
+async function loginAdmin(){
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  const loginBtn = document.getElementById("loginBtn");
+  const loginError = document.getElementById("loginError");
+  const loginMessage = document.getElementById("loginMessage");
+
+  loginError.classList.add("hidden");
+  loginMessage.classList.add("hidden");
+
+  if(!email || !password){
+    alert("فضلاً أدخلي البريد وكلمة المرور");
+    return;
+  }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = "جاري الدخول...";
+
+  try{
+    await auth.signInWithEmailAndPassword(email, password);
+    document.getElementById("adminEmail").value = "";
+    document.getElementById("adminPassword").value = "";
+    loginMessage.textContent = "تم تسجيل الدخول بنجاح.";
+    loginMessage.classList.remove("hidden");
+  }catch(error){
+    loginError.textContent = "تعذر تسجيل الدخول. تأكدي من البريد وكلمة المرور.";
+    loginError.classList.remove("hidden");
+    console.error(error);
+  }finally{
+    loginBtn.disabled = false;
+    loginBtn.textContent = "تسجيل الدخول";
+  }
+}
+
+async function logoutAdmin(){
+  await auth.signOut();
 }
 
 async function registerChild(){
@@ -530,6 +621,11 @@ function fillSelects(){
 }
 
 async function addAchievement(){
+  if(!currentAdmin){
+    alert("هذه العملية للمعلمة فقط. فضلاً سجلي الدخول أولاً.");
+    return;
+  }
+
   clearFirebaseError();
 
   const btn = document.getElementById("achievementBtn");
@@ -552,7 +648,8 @@ async function addAchievement(){
       type: type,
       points: pointsFor(type),
       date: new Date().toLocaleDateString("ar-SA"),
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      approvedBy: currentAdmin ? currentAdmin.email : ""
     });
 
     document.getElementById("teacherMessage").textContent =
@@ -564,6 +661,63 @@ async function addAchievement(){
   }finally{
     btn.disabled = false;
     btn.textContent = "اعتماد الإنجاز";
+  }
+}
+
+
+async function deleteChild(childId, childName){
+  if(!currentAdmin){
+    alert("الحذف للمعلمة فقط.");
+    return;
+  }
+
+  if(!confirm("هل تريدين حذف الطفل: " + childName + " ؟ سيتم حذف إنجازاته أيضًا.")){
+    return;
+  }
+
+  try{
+    await db.collection("children").doc(childId).delete();
+
+    const related = await db.collection("achievements").where("childId","==",childId).get();
+    const batch = db.batch();
+    related.forEach(doc => batch.delete(doc.ref));
+    await batch.commit();
+
+  }catch(error){
+    showFirebaseError(error);
+  }
+}
+
+async function editChild(childId){
+  if(!currentAdmin){
+    alert("التعديل للمعلمة فقط.");
+    return;
+  }
+
+  const child = childrenData.find(c => c.id === childId);
+  if(!child) return;
+
+  const newName = prompt("تعديل اسم الطفل:", child.name);
+  if(!newName) return;
+
+  const newAge = prompt("تعديل العمر:", child.age || "");
+  if(!newAge) return;
+
+  const newParent = prompt("تعديل اسم ولي الأمر:", child.parentName || "");
+  if(!newParent) return;
+
+  const newLevel = prompt("تعديل المستوى: روضة / تمهيدي / ابتدائي / متوسط", child.level || "تمهيدي");
+  if(!newLevel) return;
+
+  try{
+    await db.collection("children").doc(childId).update({
+      name: newName.trim(),
+      age: Number(newAge),
+      parentName: newParent.trim(),
+      level: newLevel.trim()
+    });
+  }catch(error){
+    showFirebaseError(error);
   }
 }
 
@@ -611,6 +765,7 @@ function renderChildrenTable(){
         <th>السور</th>
         <th>النقاط</th>
         <th>الوسام</th>
+        <th>إدارة</th>
       </tr>
   `;
 
@@ -625,6 +780,10 @@ function renderChildrenTable(){
         <td>${done}</td>
         <td>${points}</td>
         <td>${badgeFor(points)}</td>
+        <td>
+          <button class="edit-btn" onclick="editChild('${child.id}')">تعديل</button>
+          <button class="delete-btn" onclick="deleteChild('${child.id}','${child.name}')">حذف</button>
+        </td>
       </tr>
     `;
   });
@@ -668,6 +827,10 @@ function startFirebaseListeners(){
     showFirebaseError(error);
   });
 }
+
+auth.onAuthStateChanged(user => {
+  setAdminView(user);
+});
 
 document.addEventListener("DOMContentLoaded", startFirebaseListeners);
 </script>
